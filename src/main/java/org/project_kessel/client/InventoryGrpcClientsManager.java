@@ -90,4 +90,7 @@ public class InventoryGrpcClientsManager {
         return new RelationshipsClient(channel);
     }
 
+    public NotificationsIntegrationClient getNotificationsIntegrationClient() {
+        return new NotificationsIntegrationClient(channel);
+    }
 }
