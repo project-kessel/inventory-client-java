@@ -78,6 +78,10 @@ public class InventoryGrpcClientsManager {
         return new HostsClient(channel);
     }
 
+    public HealthClient getHealthClient() {
+        return new HealthClient(channel);
+    }
+
     public K8sClustersClient getK8sClustersClient() {
         return new K8sClustersClient(channel);
     }
