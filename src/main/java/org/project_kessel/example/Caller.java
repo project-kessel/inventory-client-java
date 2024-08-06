@@ -1,6 +1,6 @@
 package org.project_kessel.example;
 
-import org.project_kessel.api.inventory.v1beta1.CreateRHELHostRequest;
+import org.project_kessel.api.inventory.v1beta1.CreateRhelHostRequest;
 import org.project_kessel.api.inventory.v1beta1.RhelHost;
 import org.project_kessel.client.InventoryGrpcClientsManager;
 
@@ -12,10 +12,10 @@ public class Caller {
         var hostClient = clientsManager.getHostClient();
 
         RhelHost host = RhelHost.newBuilder().build();
-        CreateRHELHostRequest createRHELHostRequest = CreateRHELHostRequest.newBuilder()
+        CreateRhelHostRequest createRHELHostRequest =  CreateRhelHostRequest.newBuilder()
                 .setHost(host).build();
 
-        var hostResponse = hostClient.CreateRHELHost(createRHELHostRequest);
+        var hostResponse = hostClient.CreateRhelHost(createRHELHostRequest);
         System.out.println(hostResponse.getHost());
 
     }

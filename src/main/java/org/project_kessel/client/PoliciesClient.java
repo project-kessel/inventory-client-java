@@ -11,12 +11,12 @@ import java.util.logging.Logger;
 public class PoliciesClient {
     private static final Logger logger = Logger.getLogger(PoliciesClient.class.getName());
 
-    private final PoliciesServiceGrpc.PoliciesServiceStub asyncStub;
-    private final PoliciesServiceGrpc.PoliciesServiceBlockingStub blockingStub;
+    private final KesselPolicyServiceGrpc.KesselPolicyServiceStub asyncStub;
+    private final KesselPolicyServiceGrpc.KesselPolicyServiceBlockingStub blockingStub;
 
     PoliciesClient(Channel channel){
-        asyncStub = PoliciesServiceGrpc.newStub(channel);
-        blockingStub = PoliciesServiceGrpc.newBlockingStub(channel);
+        asyncStub = KesselPolicyServiceGrpc.newStub(channel);
+        blockingStub = KesselPolicyServiceGrpc.newBlockingStub(channel);
     }
 
     public CreatePolicyResponse CreatePolicy(CreatePolicyRequest request) {

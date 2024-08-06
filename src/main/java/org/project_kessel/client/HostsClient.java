@@ -4,32 +4,32 @@ import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
-import org.project_kessel.api.inventory.v1beta1.CreateRHELHostRequest;
-import org.project_kessel.api.inventory.v1beta1.CreateRHELHostResponse;
-import org.project_kessel.api.inventory.v1beta1.HostsServiceGrpc;
+import org.project_kessel.api.inventory.v1beta1.CreateRhelHostRequest;
+import org.project_kessel.api.inventory.v1beta1.CreateRhelHostResponse;
+import org.project_kessel.api.inventory.v1beta1.KesselRhelHostServiceGrpc;
 
 import java.util.logging.Logger;
 
 public class HostsClient {
     private static final Logger logger = Logger.getLogger(HostsClient.class.getName());
 
-    private final HostsServiceGrpc.HostsServiceStub asyncStub;
-    private final HostsServiceGrpc.HostsServiceBlockingStub blockingStub;
+    private final KesselRhelHostServiceGrpc.KesselRhelHostServiceStub asyncStub;
+    private final KesselRhelHostServiceGrpc.KesselRhelHostServiceBlockingStub blockingStub;
 
     HostsClient(Channel channel){
-        asyncStub = HostsServiceGrpc.newStub(channel);
-        blockingStub = HostsServiceGrpc.newBlockingStub(channel);
+        asyncStub = KesselRhelHostServiceGrpc.newStub(channel);
+        blockingStub = KesselRhelHostServiceGrpc.newBlockingStub(channel);
     }
 
-    public void CreateRHELHost(CreateRHELHostRequest request, StreamObserver<CreateRHELHostResponse> responseStreamObserver) {
-        asyncStub.createRHELHost(request, responseStreamObserver);
+    public void CreateRhelHost(CreateRhelHostRequest request, StreamObserver<CreateRhelHostResponse> responseStreamObserver) {
+        asyncStub.createRhelHost(request, responseStreamObserver);
     }
 
-    public Uni<CreateRHELHostResponse> CreateRHELHostUni(CreateRHELHostRequest request) {
-        final UnicastProcessor<CreateRHELHostResponse> responseProcessor = UnicastProcessor.create();
-        var streamObserver = new StreamObserver<CreateRHELHostResponse>() {
+    public Uni<CreateRhelHostResponse> CreateRhelHostUni(CreateRhelHostRequest request) {
+        final UnicastProcessor<CreateRhelHostResponse> responseProcessor = UnicastProcessor.create();
+        var streamObserver = new StreamObserver<CreateRhelHostResponse>() {
             @Override
-            public void onNext(CreateRHELHostResponse response) {
+            public void onNext(CreateRhelHostResponse response) {
                 responseProcessor.onNext(response);
             }
 
@@ -44,11 +44,11 @@ public class HostsClient {
             }
         };
         var uni = Uni.createFrom().publisher(responseProcessor);
-        CreateRHELHost(request, streamObserver);
+        CreateRhelHost(request, streamObserver);
         return uni;
     }
 
-    public CreateRHELHostResponse CreateRHELHost(CreateRHELHostRequest request) {
-        return blockingStub.createRHELHost(request);
+    public CreateRhelHostResponse CreateRhelHost(CreateRhelHostRequest request) {
+        return blockingStub.createRhelHost(request);
     }
 }

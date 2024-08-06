@@ -11,12 +11,12 @@ import java.util.logging.Logger;
 public class RelationshipsClient {
     private static final Logger logger = Logger.getLogger(PoliciesClient.class.getName());
 
-    private final RelationshipsServiceGrpc.RelationshipsServiceStub asyncStub;
-    private final RelationshipsServiceGrpc.RelationshipsServiceBlockingStub blockingStub;
+    private final KesselPolicyRelationshipServiceGrpc.KesselPolicyRelationshipServiceStub asyncStub;
+    private final KesselPolicyRelationshipServiceGrpc.KesselPolicyRelationshipServiceBlockingStub blockingStub;
 
     RelationshipsClient(Channel channel){
-        asyncStub = RelationshipsServiceGrpc.newStub(channel);
-        blockingStub = RelationshipsServiceGrpc.newBlockingStub(channel);
+        asyncStub = KesselPolicyRelationshipServiceGrpc.newStub(channel);
+        blockingStub = KesselPolicyRelationshipServiceGrpc.newBlockingStub(channel);
     }
 
     public CreatePolicyRelationshipResponse CreatePolicyRelationship(CreatePolicyRelationshipRequest request){
@@ -50,19 +50,19 @@ public class RelationshipsClient {
         return uni;
     }
 
-    public DeleteResourceRelationshipByURNResponse DeleteResourceRelationshipByURN(DeleteResourceRelationshipByURNRequest request){
-        return blockingStub.deleteResourceRelationshipByURN(request);
+    public DeleteResourceRelationshipByUrnResponse DeleteResourceRelationshipByURN(DeleteResourceRelationshipByUrnRequest request){
+        return blockingStub.deleteResourceRelationshipByUrn(request);
     }
 
-    public void DeleteResourceRelationshipByURN(DeleteResourceRelationshipByURNRequest request, StreamObserver<DeleteResourceRelationshipByURNResponse> responseObserver){
-        asyncStub.deleteResourceRelationshipByURN(request, responseObserver);
+    public void DeleteResourceRelationshipByURN(DeleteResourceRelationshipByUrnRequest request, StreamObserver<DeleteResourceRelationshipByUrnResponse> responseObserver){
+        asyncStub.deleteResourceRelationshipByUrn(request, responseObserver);
     }
 
-    public Uni<DeleteResourceRelationshipByURNResponse> DeleteResourceRelationshipByURNUni(DeleteResourceRelationshipByURNRequest request) {
-        final UnicastProcessor<DeleteResourceRelationshipByURNResponse> responseProcessor = UnicastProcessor.create();
-        var streamObserver = new StreamObserver<DeleteResourceRelationshipByURNResponse>() {
+    public Uni<DeleteResourceRelationshipByUrnResponse> DeleteResourceRelationshipByURNUni(DeleteResourceRelationshipByUrnRequest request) {
+        final UnicastProcessor<DeleteResourceRelationshipByUrnResponse> responseProcessor = UnicastProcessor.create();
+        var streamObserver = new StreamObserver<DeleteResourceRelationshipByUrnResponse>() {
             @Override
-            public void onNext(DeleteResourceRelationshipByURNResponse response) {
+            public void onNext(DeleteResourceRelationshipByUrnResponse response) {
                 responseProcessor.onNext(response);
             }
 
@@ -81,19 +81,19 @@ public class RelationshipsClient {
         return uni;
     }
 
-    public UpdateResourceRelationshipByURNResponse UpdateResourceRelationshipByURNHs(UpdateResourceRelationshipByURNHsRequest request){
-        return blockingStub.updateResourceRelationshipByURNHs(request);
+    public UpdateResourceRelationshipByUrnHsResponse UpdateResourceRelationshipByURNHs(UpdateResourceRelationshipByUrnHsRequest request){
+        return blockingStub.updateResourceRelationshipByUrnHs(request);
     }
 
-    public void UpdateResourceRelationshipByURNHs(UpdateResourceRelationshipByURNHsRequest request, StreamObserver<UpdateResourceRelationshipByURNResponse> responseObserver){
-        asyncStub.updateResourceRelationshipByURNHs(request, responseObserver);
+    public void UpdateResourceRelationshipByURNHs(UpdateResourceRelationshipByUrnHsRequest request, StreamObserver<UpdateResourceRelationshipByUrnHsResponse> responseObserver){
+        asyncStub.updateResourceRelationshipByUrnHs(request, responseObserver);
     }
 
-    public Uni<UpdateResourceRelationshipByURNResponse> UpdateResourceRelationshipByURNHsUni(UpdateResourceRelationshipByURNHsRequest request) {
-        final UnicastProcessor<UpdateResourceRelationshipByURNResponse> responseProcessor = UnicastProcessor.create();
-        var streamObserver = new StreamObserver<UpdateResourceRelationshipByURNResponse>() {
+    public Uni<UpdateResourceRelationshipByUrnHsResponse> UpdateResourceRelationshipByURNHsUni(UpdateResourceRelationshipByUrnHsRequest request) {
+        final UnicastProcessor<UpdateResourceRelationshipByUrnHsResponse> responseProcessor = UnicastProcessor.create();
+        var streamObserver = new StreamObserver<UpdateResourceRelationshipByUrnHsResponse>() {
             @Override
-            public void onNext(UpdateResourceRelationshipByURNResponse response) {
+            public void onNext(UpdateResourceRelationshipByUrnHsResponse response) {
                 responseProcessor.onNext(response);
             }
 

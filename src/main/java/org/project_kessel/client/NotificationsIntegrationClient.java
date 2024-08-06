@@ -12,12 +12,12 @@ public class NotificationsIntegrationClient {
 
     private static final Logger logger = Logger.getLogger(HostsClient.class.getName());
 
-    private final NotificationsIntegrationsServiceGrpc.NotificationsIntegrationsServiceStub asyncStub;
-    private final NotificationsIntegrationsServiceGrpc.NotificationsIntegrationsServiceBlockingStub blockingStub;
+    private final KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceStub asyncStub;
+    private final KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceBlockingStub blockingStub;
 
     NotificationsIntegrationClient(Channel channel) {
-        asyncStub = NotificationsIntegrationsServiceGrpc.newStub(channel);
-        blockingStub = NotificationsIntegrationsServiceGrpc.newBlockingStub(channel);
+        asyncStub = KesselNotificationsIntegrationServiceGrpc.newStub(channel);
+        blockingStub = KesselNotificationsIntegrationServiceGrpc.newBlockingStub(channel);
     }
 
     public CreateNotificationsIntegrationResponse CreateNotificationsIntegration(CreateNotificationsIntegrationRequest request) {
