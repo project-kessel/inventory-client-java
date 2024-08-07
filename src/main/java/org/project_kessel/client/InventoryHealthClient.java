@@ -5,12 +5,12 @@ import org.project_kessel.api.inventory.v1.*;
 
 import java.util.logging.Logger;
 
-public class HealthClient {
-    private static final Logger logger = Logger.getLogger(HealthClient.class.getName());
+public class InventoryHealthClient {
+    private static final Logger logger = Logger.getLogger(InventoryHealthClient.class.getName());
 
     private final KesselInventoryHealthServiceGrpc.KesselInventoryHealthServiceBlockingStub blockingStub;
 
-    HealthClient(Channel channel){
+    InventoryHealthClient(Channel channel){
         blockingStub = KesselInventoryHealthServiceGrpc.newBlockingStub(channel);
     }
 

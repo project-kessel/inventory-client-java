@@ -10,13 +10,13 @@ import org.project_kessel.api.inventory.v1beta1.KesselRhelHostServiceGrpc;
 
 import java.util.logging.Logger;
 
-public class HostsClient {
-    private static final Logger logger = Logger.getLogger(HostsClient.class.getName());
+public class RhelHostClient {
+    private static final Logger logger = Logger.getLogger(RhelHostClient.class.getName());
 
     private final KesselRhelHostServiceGrpc.KesselRhelHostServiceStub asyncStub;
     private final KesselRhelHostServiceGrpc.KesselRhelHostServiceBlockingStub blockingStub;
 
-    HostsClient(Channel channel){
+    RhelHostClient(Channel channel){
         asyncStub = KesselRhelHostServiceGrpc.newStub(channel);
         blockingStub = KesselRhelHostServiceGrpc.newBlockingStub(channel);
     }

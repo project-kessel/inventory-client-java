@@ -8,13 +8,13 @@ import org.project_kessel.api.inventory.v1beta1.*;
 
 import java.util.logging.Logger;
 
-public class RelationshipsClient {
+public class PolicyRelationshipClient {
     private static final Logger logger = Logger.getLogger(PoliciesClient.class.getName());
 
     private final KesselPolicyRelationshipServiceGrpc.KesselPolicyRelationshipServiceStub asyncStub;
     private final KesselPolicyRelationshipServiceGrpc.KesselPolicyRelationshipServiceBlockingStub blockingStub;
 
-    RelationshipsClient(Channel channel){
+    PolicyRelationshipClient(Channel channel){
         asyncStub = KesselPolicyRelationshipServiceGrpc.newStub(channel);
         blockingStub = KesselPolicyRelationshipServiceGrpc.newBlockingStub(channel);
     }

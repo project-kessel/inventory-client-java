@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class NotificationsIntegrationClient {
 
-    private static final Logger logger = Logger.getLogger(HostsClient.class.getName());
+    private static final Logger logger = Logger.getLogger(RhelHostClient.class.getName());
 
     private final KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceStub asyncStub;
     private final KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceBlockingStub blockingStub;

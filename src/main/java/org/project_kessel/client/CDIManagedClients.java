@@ -24,12 +24,12 @@ public class CDIManagedClients {
     }
 
     @Produces
-    public HostsClient getHostClient(InventoryGrpcClientsManager manager) {
+    public RhelHostClient getHostClient(InventoryGrpcClientsManager manager) {
         return manager.getHostClient();
     }
 
     @Produces
-    public HealthClient getHealthClient(InventoryGrpcClientsManager manager) {
+    public InventoryHealthClient getHealthClient(InventoryGrpcClientsManager manager) {
         return manager.getHealthClient();
     }
 
@@ -44,7 +44,7 @@ public class CDIManagedClients {
     }
 
     @Produces
-    public RelationshipsClient getRelationshipsClient(InventoryGrpcClientsManager manager) {
+    public PolicyRelationshipClient getRelationshipsClient(InventoryGrpcClientsManager manager) {
         return manager.getRelationshipsClient();
     }
 
