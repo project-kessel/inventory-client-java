@@ -5,7 +5,7 @@ package kessel.inventory.v1beta1;
 import "google/api/field_behavior.proto";
 import "google/protobuf/timestamp.proto";
 
-import "kessel/inventory/v1beta1/resource_tag.proto";
+import "kessel/inventory/v1beta1/resource_label.proto";
 
 option go_package = "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta1";
 option java_multiple_files = true;
@@ -14,9 +14,6 @@ option java_package = "org.project_kessel.api.inventory.v1beta1";
 message Metadata {
   // Kessel Asset Inventory generated identifier.
   int64 id = 3355 [ (google.api.field_behavior) = OUTPUT_ONLY ];
-
-  // Some identifier intrinsic to the resource itself that is unique across reporters
-  string natural_id = 1;
 
   // The type of the Resource
   string resource_type = 442752204;
@@ -41,5 +38,5 @@ message Metadata {
   // resource can only be a member of one workspace.
   string workspace = 35122327;
 
-  repeated ResourceTag tags = 3552281;
+  repeated ResourceLabel labels = 3552281;
 }
