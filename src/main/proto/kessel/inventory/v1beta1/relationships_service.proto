@@ -1,68 +1,68 @@
 syntax = "proto3";
 
-package api.kessel.inventory.v1beta1;
+package kessel.inventory.v1beta1;
 
 import "google/api/annotations.proto";
 
-import public "kessel/inventory/v1beta1/policy_relationship.proto";
-import public "kessel/inventory/v1beta1/update_resource_relationship_by_urnhs_resources_parameter.proto";
+import "kessel/inventory/v1beta1/policy_relationship.proto";
+import "kessel/inventory/v1beta1/update_resource_relationship_by_urnhs_resources_parameter.proto";
 
-option go_package = "api/kessel/inventory/v1beta1;v1beta1";
+option go_package = "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta1";
 option java_multiple_files = true;
 option java_package = "org.project_kessel.api.inventory.v1beta1";
 
 message CreatePolicyRelationshipRequest {
   // The resource relationship to create in Kessel Asset Inventory
-  PolicyRelationship policyRelationship = 1;
+  PolicyRelationship policy_relationship = 1;
 }
 
 message CreatePolicyRelationshipResponse {
   // The resource relationship created in Kessel Asset Inventory
-  PolicyRelationship policyRelationship = 1;
+  PolicyRelationship policy_relationship = 1;
 }
 
-message UpdateResourceRelationshipByURNHsRequest {
+message UpdateResourceRelationshipByUrnHsRequest {
   // The subject {resource} and the object {resource}. A relationship is between
   // a Subject and an Object, e.g. a Policy (subject) has a propagated
   // relationship to an k8s cluster (object)
-  UpdateResourceRelationshipByUrnhsResourcesParameter resources = 1;
+  UpdateResourceRelationshipByUrnHsResourcesParameter resources = 1;
   // Update a resource relationship in Kessel Asset Inventory by the {subject
   // resource, object resource}. A relationship is between a Subject and an
   // Object, e.g. a Policy (subject) has a propagated relationship to an k8s
   // cluster (object).. The {resource} format
-  // \"<reporter_data.reporter_type>:<reporter_data.reporter_id>::<reporter_data.resourceId_alias>\".
-  PolicyRelationship policyRelationship = 2;
+  // \"<reporter_data.reporter_type>:<reporter_data.resourceId_alias>\".
+  PolicyRelationship policy_relationship = 2;
 }
 
-message UpdateResourceRelationshipByURNResponse {}
+message UpdateResourceRelationshipByUrnHsResponse {}
 
-message DeleteResourceRelationshipByURNRequest {
+message DeleteResourceRelationshipByUrnRequest {
   // The subject {resource} and the object {resource}. A relationship is between
   // a Subject and an Object, e.g. a Policy (subject) has a propagated
   // relationship to an k8s cluster (object)
-  UpdateResourceRelationshipByUrnhsResourcesParameter resources = 1;
+  UpdateResourceRelationshipByUrnHsResourcesParameter resources = 1;
 }
 
-message DeleteResourceRelationshipByURNResponse {}
+message DeleteResourceRelationshipByUrnResponse {}
 
-service RelationshipsService {
+service KesselPolicyRelationshipService {
   rpc CreatePolicyRelationship(CreatePolicyRelationshipRequest) returns (CreatePolicyRelationshipResponse) {
     option (google.api.http) = {
-      post : "/api/inventory/v1beta1/policy_relationships"
-      body : "policyRelationship"
+      post : "/api/inventory/v1beta1/policyRelationships"
+      body : "*"
     };
   };
 
-  rpc UpdateResourceRelationshipByURNHs(UpdateResourceRelationshipByURNHsRequest) returns (UpdateResourceRelationshipByURNResponse) {
+  rpc UpdateResourceRelationshipByUrnHs(UpdateResourceRelationshipByUrnHsRequest) returns (UpdateResourceRelationshipByUrnHsResponse) {
     option (google.api.http) = {
-      put: "/api/inventory/v1beta1/policy_relationships"
-      body : "policyRelationship"
+      put: "/api/inventory/v1beta1/policyRelationships"
+      body : "*"
     };
   };
 
-  rpc DeleteResourceRelationshipByURN(DeleteResourceRelationshipByURNRequest) returns (DeleteResourceRelationshipByURNResponse) {
+  rpc DeleteResourceRelationshipByUrn(DeleteResourceRelationshipByUrnRequest) returns (DeleteResourceRelationshipByUrnResponse) {
     option (google.api.http) = {
-      delete: "/api/inventory/v1beta1/policy_relationships"
+      delete: "/api/inventory/v1beta1/policyRelationships"
     };
   };
 }

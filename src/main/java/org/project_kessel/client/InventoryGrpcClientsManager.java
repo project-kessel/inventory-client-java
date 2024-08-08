@@ -74,8 +74,12 @@ public class InventoryGrpcClientsManager {
         channel.shutdown();
     }
 
-    public HostsClient getHostClient() {
-        return new HostsClient(channel);
+    public RhelHostClient getHostClient() {
+        return new RhelHostClient(channel);
+    }
+
+    public InventoryHealthClient getHealthClient() {
+        return new InventoryHealthClient(channel);
     }
 
     public K8sClustersClient getK8sClustersClient() {
@@ -86,8 +90,11 @@ public class InventoryGrpcClientsManager {
         return new PoliciesClient(channel);
     }
 
-    public RelationshipsClient getRelationshipsClient() {
-        return new RelationshipsClient(channel);
+    public PolicyRelationshipClient getRelationshipsClient() {
+        return new PolicyRelationshipClient(channel);
     }
 
+    public NotificationsIntegrationClient getNotificationsIntegrationClient() {
+        return new NotificationsIntegrationClient(channel);
+    }
 }

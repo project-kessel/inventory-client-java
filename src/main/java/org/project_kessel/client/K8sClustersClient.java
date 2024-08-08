@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 
 public class K8sClustersClient {
     private static final Logger logger = Logger.getLogger(K8sClustersClient.class.getName());
-    private final K8sClustersServiceGrpc.K8sClustersServiceStub asyncStub;
-    private final K8sClustersServiceGrpc.K8sClustersServiceBlockingStub blockingStub;
+    private final KesselK8sClusterServiceGrpc.KesselK8sClusterServiceStub asyncStub;
+    private final KesselK8sClusterServiceGrpc.KesselK8sClusterServiceBlockingStub blockingStub;
 
     K8sClustersClient(Channel channel){
-        asyncStub = K8sClustersServiceGrpc.newStub(channel);
-        blockingStub = K8sClustersServiceGrpc.newBlockingStub(channel);
+        asyncStub = KesselK8sClusterServiceGrpc.newStub(channel);
+        blockingStub = KesselK8sClusterServiceGrpc.newBlockingStub(channel);
     }
 
     public void UpdateK8sCluster(UpdateK8sClusterRequest request, StreamObserver<UpdateK8sClusterResponse> responseObserver){
