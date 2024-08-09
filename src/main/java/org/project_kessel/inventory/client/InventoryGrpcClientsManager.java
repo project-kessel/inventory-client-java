@@ -1,6 +1,7 @@
-package org.project_kessel.client;
+package org.project_kessel.inventory.client;
 
 import io.grpc.*;
+import org.project_kessel.inventory.client.authn.CallCredentialsFactory;
 
 import java.util.HashMap;
 
@@ -18,11 +19,40 @@ public class InventoryGrpcClientsManager {
         return insecureManagers.get(targetUrl);
     }
 
+    public static synchronized InventoryGrpcClientsManager forInsecureClients(String targetUrl, Config.AuthenticationConfig authnConfig) throws RuntimeException {
+        if (!insecureManagers.containsKey(targetUrl)) {
+            try {
+                var manager = new InventoryGrpcClientsManager(targetUrl,
+                        InsecureChannelCredentials.create(),
+                        CallCredentialsFactory.create(authnConfig));
+                insecureManagers.put(targetUrl, manager);
+            } catch (CallCredentialsFactory.CallCredentialsCreationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return insecureManagers.get(targetUrl);
+    }
+
     public static synchronized InventoryGrpcClientsManager forSecureClients(String targetUrl) {
         if (!secureManagers.containsKey(targetUrl)) {
             var tlsChannelCredentials = TlsChannelCredentials.create();
             var manager = new InventoryGrpcClientsManager(targetUrl, tlsChannelCredentials);
             secureManagers.put(targetUrl, manager);
+        }
+        return secureManagers.get(targetUrl);
+    }
+
+    public static synchronized InventoryGrpcClientsManager forSecureClients(String targetUrl, Config.AuthenticationConfig authnConfig) {
+        if (!secureManagers.containsKey(targetUrl)) {
+            var tlsChannelCredentials = TlsChannelCredentials.create();
+            try {
+                var manager = new InventoryGrpcClientsManager(targetUrl,
+                        tlsChannelCredentials,
+                        CallCredentialsFactory.create(authnConfig));
+                secureManagers.put(targetUrl, manager);
+            } catch (CallCredentialsFactory.CallCredentialsCreationException e) {
+                throw new RuntimeException(e);
+            }
         }
         return secureManagers.get(targetUrl);
     }
@@ -69,6 +99,18 @@ public class InventoryGrpcClientsManager {
     private InventoryGrpcClientsManager(String targetUrl, ChannelCredentials credentials) {
         this.channel = Grpc.newChannelBuilder(targetUrl, credentials).build();
     }
+
+    /**
+     * Create a manager for a grpc channel with server credentials and credentials for per-rpc client authentication.
+     * @param targetUrl
+     * @param serverCredentials authenticates the server for TLS or are InsecureChannelCredentials
+     * @param authnCredentials authenticates the client on each rpc
+     */
+    private InventoryGrpcClientsManager(String targetUrl, ChannelCredentials serverCredentials, CallCredentials authnCredentials) {
+        this.channel = Grpc.newChannelBuilder(targetUrl,
+                CompositeChannelCredentials.create(serverCredentials, authnCredentials)).build();
+    }
+
 
     private void closeClientChannel() {
         channel.shutdown();
