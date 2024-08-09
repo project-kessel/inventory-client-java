@@ -1,10 +1,7 @@
-package org.project_kessel.example;
+package org.project_kessel.inventory.example;
 
 import org.project_kessel.api.inventory.v1.GetLivezRequest;
-import org.project_kessel.api.inventory.v1beta1.CreateRhelHostRequest;
-import org.project_kessel.api.inventory.v1beta1.Metadata;
-import org.project_kessel.api.inventory.v1beta1.RhelHost;
-import org.project_kessel.client.InventoryGrpcClientsManager;
+import org.project_kessel.inventory.client.InventoryGrpcClientsManager;
 
 public class Caller {
 
