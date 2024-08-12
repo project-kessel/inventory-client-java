@@ -1,10 +1,11 @@
-package org.project_kessel.client;
+package org.project_kessel.inventory.client;
 
 import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
 import org.project_kessel.api.inventory.v1beta1.*;
+
 
 import java.util.logging.Logger;
 

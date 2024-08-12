@@ -1,4 +1,4 @@
-package org.project_kessel.client;
+package org.project_kessel.inventory.client;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
@@ -15,9 +15,16 @@ public class CDIManagedClients {
     InventoryGrpcClientsManager getManager(Config config) {
         var isSecureClients = config.isSecureClients();
         var targetUrl = config.targetUrl();
-
+        var authnEnabled = config.authenticationConfig().map(t -> !t.mode().equals(Config.AuthMode.DISABLED)).orElse(false);
         if (isSecureClients) {
+            if(authnEnabled) {
+                return InventoryGrpcClientsManager.forSecureClients(targetUrl, config.authenticationConfig().get());
+            }
             return InventoryGrpcClientsManager.forSecureClients(targetUrl);
+        }
+
+        if(authnEnabled) {
+            return InventoryGrpcClientsManager.forInsecureClients(targetUrl, config.authenticationConfig().get());
         }
 
         return InventoryGrpcClientsManager.forInsecureClients(targetUrl);

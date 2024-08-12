@@ -1,13 +1,13 @@
-package org.project_kessel.client;
+package org.project_kessel.inventory.client;
 
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.project_kessel.api.inventory.v1beta1.KesselRhelHostServiceGrpc;
 
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,7 +56,7 @@ public class InventoryGrpcClientsManagerTest {
          * creating and destroying managers on different threads. */
 
         try {
-            Hashtable<String,InventoryGrpcClientsManager> managers = new Hashtable<>();
+            Hashtable<String, InventoryGrpcClientsManager> managers = new Hashtable<>();
 
             int numberOfThreads = 100;
             ExecutorService service = Executors.newFixedThreadPool(numberOfThreads);
@@ -69,7 +69,7 @@ public class InventoryGrpcClientsManagerTest {
                 final int j = i;
                 service.submit(() -> {
                     InventoryGrpcClientsManager manager;
-                    if(j % 2 == 0) {
+                    if (j % 2 == 0) {
                         manager = InventoryGrpcClientsManager.forInsecureClients("localhost" + j);
                     } else {
                         manager = InventoryGrpcClientsManager.forSecureClients("localhost" + j);
@@ -97,7 +97,7 @@ public class InventoryGrpcClientsManagerTest {
                 final int j = i - numberOfThreads * 2 / 3;
                 service.submit(() -> {
                     InventoryGrpcClientsManager manager;
-                    if(j % 2 == 0) {
+                    if (j % 2 == 0) {
                         manager = InventoryGrpcClientsManager.forInsecureClients("localhost" + j);
                     } else {
                         manager = InventoryGrpcClientsManager.forSecureClients("localhost" + j);
@@ -109,7 +109,7 @@ public class InventoryGrpcClientsManagerTest {
             }
             latch2.await();
             latch3.await();
-        } catch(Exception e) {
+        } catch (Exception e) {
             fail("Should not have thrown any exception");
         }
     }
@@ -127,10 +127,51 @@ public class InventoryGrpcClientsManagerTest {
         insecureField.setAccessible(true);
         var secureField = InventoryGrpcClientsManager.class.getDeclaredField("secureManagers");
         secureField.setAccessible(true);
-        var insecureManagers = (HashMap<?,?>)insecureField.get(null);
-        var secureManagers = (HashMap<?,?>)secureField.get(null);
+        var insecureManagers = (HashMap<?, ?>) insecureField.get(null);
+        var secureManagers = (HashMap<?, ?>) secureField.get(null);
 
         assertEquals(2, insecureManagers.size());
         assertEquals(2, secureManagers.size());
     }
+
+    public static Config.AuthenticationConfig dummyAuthConfigWithGoodOIDCClientCredentials() {
+        return new Config.AuthenticationConfig() {
+            @Override
+            public Config.AuthMode mode() {
+                return Config.AuthMode.OIDC_CLIENT_CREDENTIALS; // any non-disabled value
+            }
+
+            @Override
+            public Optional<Config.OIDCClientCredentialsConfig> clientCredentialsConfig() {
+                return Optional.of(new Config.OIDCClientCredentialsConfig() {
+                    @Override
+                    public String issuer() {
+                        return "http://localhost:8090";
+                    }
+
+                    @Override
+                    public String clientId() {
+                        return "test";
+                    }
+
+                    @Override
+                    public String clientSecret() {
+                        return "test";
+                    }
+
+                    @Override
+                    public Optional<String[]> scope() {
+                        return Optional.empty();
+                    }
+
+                    @Override
+                    public Optional<String> oidcClientCredentialsMinterImplementation() {
+                        return Optional.empty();
+                    }
+                });
+            }
+        };
+    }
 }
+
+

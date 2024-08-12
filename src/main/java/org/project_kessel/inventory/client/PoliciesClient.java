@@ -1,4 +1,4 @@
-package org.project_kessel.client;
+package org.project_kessel.inventory.client;
 
 import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
