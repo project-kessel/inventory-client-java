@@ -1,5 +1,7 @@
 package org.project_kessel.inventory.client;
 
+import org.project_kessel.api.inventory.v1beta1.*;
+
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -12,7 +14,7 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.project_kessel.api.inventory.v1beta1.*;
+
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Use Weld as a test container to check CDI functionality.
  */
 @EnableWeld
-class CDIManagedClientsContainerTests {
+class CDIManagedInventoryClientsContainerTests {
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(new Weld().setBeanDiscoveryMode(BeanDiscoveryMode.ALL).addBeanClass(TestConfig.class)).build();
 

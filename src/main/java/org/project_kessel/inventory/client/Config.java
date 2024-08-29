@@ -28,7 +28,7 @@ public interface Config {
 
     interface AuthenticationConfig {
         @WithDefault("disabled")
-        AuthMode mode();
+        org.project_kessel.clients.authn.AuthenticationConfig.AuthMode mode();
         @WithName("client")
         Optional<OIDCClientCredentialsConfig> clientCredentialsConfig();
     }

@@ -1,119 +1,38 @@
 package org.project_kessel.inventory.client;
 
-import io.grpc.*;
-import org.project_kessel.inventory.client.authn.CallCredentialsFactory;
+import io.grpc.Channel;
+import org.project_kessel.clients.ChannelManager;
+import org.project_kessel.clients.KesselClientsManager;
 
-import java.util.HashMap;
-
-public class InventoryGrpcClientsManager {
-    private static final HashMap<String, InventoryGrpcClientsManager> insecureManagers = new HashMap<>();
-    private static final HashMap<String, InventoryGrpcClientsManager> secureManagers = new HashMap<>();
-
-    private final ManagedChannel channel;
-
-    public static synchronized InventoryGrpcClientsManager forInsecureClients(String targetUrl) {
-        if (!insecureManagers.containsKey(targetUrl)) {
-            var manager = new InventoryGrpcClientsManager(targetUrl, InsecureChannelCredentials.create());
-            insecureManagers.put(targetUrl, manager);
-        }
-        return insecureManagers.get(targetUrl);
+public class InventoryGrpcClientsManager extends KesselClientsManager {
+    private InventoryGrpcClientsManager(Channel channel) {
+        super(channel);
     }
 
-    public static synchronized InventoryGrpcClientsManager forInsecureClients(String targetUrl, Config.AuthenticationConfig authnConfig) throws RuntimeException {
-        if (!insecureManagers.containsKey(targetUrl)) {
-            try {
-                var manager = new InventoryGrpcClientsManager(targetUrl,
-                        InsecureChannelCredentials.create(),
-                        CallCredentialsFactory.create(authnConfig));
-                insecureManagers.put(targetUrl, manager);
-            } catch (CallCredentialsFactory.CallCredentialsCreationException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return insecureManagers.get(targetUrl);
+    private static final String CHANNEL_MANAGER_KEY = InventoryGrpcClientsManager.class.getName();
+
+    public static InventoryGrpcClientsManager forInsecureClients(String targetUrl) {
+        return new InventoryGrpcClientsManager(ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forInsecureClients(targetUrl));
     }
 
-    public static synchronized InventoryGrpcClientsManager forSecureClients(String targetUrl) {
-        if (!secureManagers.containsKey(targetUrl)) {
-            var tlsChannelCredentials = TlsChannelCredentials.create();
-            var manager = new InventoryGrpcClientsManager(targetUrl, tlsChannelCredentials);
-            secureManagers.put(targetUrl, manager);
-        }
-        return secureManagers.get(targetUrl);
+    public static InventoryGrpcClientsManager forInsecureClients(String targetUrl, Config.AuthenticationConfig authnConfig) throws RuntimeException {
+        return new InventoryGrpcClientsManager(ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forInsecureClients(targetUrl, AuthnConfigConverter.convert(authnConfig)));
     }
 
-    public static synchronized InventoryGrpcClientsManager forSecureClients(String targetUrl, Config.AuthenticationConfig authnConfig) {
-        if (!secureManagers.containsKey(targetUrl)) {
-            var tlsChannelCredentials = TlsChannelCredentials.create();
-            try {
-                var manager = new InventoryGrpcClientsManager(targetUrl,
-                        tlsChannelCredentials,
-                        CallCredentialsFactory.create(authnConfig));
-                secureManagers.put(targetUrl, manager);
-            } catch (CallCredentialsFactory.CallCredentialsCreationException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return secureManagers.get(targetUrl);
+    public static InventoryGrpcClientsManager forSecureClients(String targetUrl) {
+        return new InventoryGrpcClientsManager(ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forSecureClients(targetUrl));
     }
 
-
-    public static synchronized void shutdownAll() {
-        for (var manager : insecureManagers.values()) {
-            manager.closeClientChannel();
-        }
-        insecureManagers.clear();
-        for (var manager : secureManagers.values()) {
-            manager.closeClientChannel();
-        }
-        secureManagers.clear();
+    public static InventoryGrpcClientsManager forSecureClients(String targetUrl, Config.AuthenticationConfig authnConfig) {
+        return new InventoryGrpcClientsManager(ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forSecureClients(targetUrl, AuthnConfigConverter.convert(authnConfig)));
     }
 
-    public static synchronized void shutdownManager(InventoryGrpcClientsManager managerToShutdown) {
-        var iter = insecureManagers.entrySet().iterator();
-        while (iter.hasNext()) {
-            var entry = iter.next();
-            if(entry.getValue().channel == managerToShutdown.channel) {
-                entry.getValue().closeClientChannel();
-                iter.remove();
-                return;
-            }
-        }
-        iter = secureManagers.entrySet().iterator();
-        while (iter.hasNext()) {
-            var entry = iter.next();
-            if(entry.getValue().channel == managerToShutdown.channel) {
-                entry.getValue().closeClientChannel();
-                iter.remove();
-                return;
-            }
-        }
-    }
-    /**
-     *
-     * Bearer token and other things can be added to ChannelCredentials. New static factory methods can be added.
-     * Config management also required.
-     * @param targetUrl
-     * @param credentials
-     */
-    private InventoryGrpcClientsManager(String targetUrl, ChannelCredentials credentials) {
-        this.channel = Grpc.newChannelBuilder(targetUrl, credentials).build();
+    public static void shutdownAll() {
+        ChannelManager.getInstance(CHANNEL_MANAGER_KEY).shutdownAll();
     }
 
-    /**
-     * Create a manager for a grpc channel with server credentials and credentials for per-rpc client authentication.
-     * @param targetUrl
-     * @param serverCredentials authenticates the server for TLS or are InsecureChannelCredentials
-     * @param authnCredentials authenticates the client on each rpc
-     */
-    private InventoryGrpcClientsManager(String targetUrl, ChannelCredentials serverCredentials, CallCredentials authnCredentials) {
-        this.channel = Grpc.newChannelBuilder(targetUrl,
-                CompositeChannelCredentials.create(serverCredentials, authnCredentials)).build();
-    }
-
-
-    private void closeClientChannel() {
-        channel.shutdown();
+    public static void shutdownManager(InventoryGrpcClientsManager managerToShutdown) {
+        ChannelManager.getInstance(CHANNEL_MANAGER_KEY).shutdownChannel(managerToShutdown.channel);
     }
 
     public RhelHostClient getHostClient() {

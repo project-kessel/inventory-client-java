@@ -4,6 +4,7 @@ package org.project_kessel.inventory.client;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.project_kessel.clients.authn.AuthenticationConfig;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -137,8 +138,8 @@ public class InventoryGrpcClientsManagerTest {
     public static Config.AuthenticationConfig dummyAuthConfigWithGoodOIDCClientCredentials() {
         return new Config.AuthenticationConfig() {
             @Override
-            public Config.AuthMode mode() {
-                return Config.AuthMode.OIDC_CLIENT_CREDENTIALS; // any non-disabled value
+            public AuthenticationConfig.AuthMode mode() {
+                return AuthenticationConfig.AuthMode.OIDC_CLIENT_CREDENTIALS; // any non-disabled value
             }
 
             @Override
