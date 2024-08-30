@@ -14,10 +14,10 @@ class CDIManagedInventoryClientsTest {
     @Test
     void testInsecureNoAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(false, makeDummyAuthenticationConfig(false));
-        CDIManagedInventoryClients cdiManagedClients = new CDIManagedInventoryClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(1)
@@ -40,10 +40,10 @@ class CDIManagedInventoryClientsTest {
     @Test
     void testInsecureWithAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(false, makeDummyAuthenticationConfig(true));
-        CDIManagedInventoryClients cdiManagedClients = new CDIManagedInventoryClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(0)
@@ -66,10 +66,10 @@ class CDIManagedInventoryClientsTest {
     @Test
     void testSecureNoAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(true, makeDummyAuthenticationConfig(false));
-        CDIManagedInventoryClients cdiManagedClients = new CDIManagedInventoryClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(0)
@@ -92,10 +92,10 @@ class CDIManagedInventoryClientsTest {
     @Test
     void testSecureWithAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(true, makeDummyAuthenticationConfig(true));
-        CDIManagedInventoryClients cdiManagedClients = new CDIManagedInventoryClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(0)
