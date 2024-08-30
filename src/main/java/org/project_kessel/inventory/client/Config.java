@@ -3,6 +3,7 @@ package org.project_kessel.inventory.client;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
+import org.project_kessel.clients.authn.AuthenticationConfig.AuthMode;
 
 import java.util.Optional;
 
@@ -14,10 +15,6 @@ import java.util.Optional;
  */
 @ConfigMapping(prefix = "inventory-api")
 public interface Config {
-    enum AuthMode {
-        DISABLED,
-        OIDC_CLIENT_CREDENTIALS
-    }
 
     @WithDefault("false")
     boolean isSecureClients();
@@ -28,7 +25,7 @@ public interface Config {
 
     interface AuthenticationConfig {
         @WithDefault("disabled")
-        org.project_kessel.clients.authn.AuthenticationConfig.AuthMode mode();
+        AuthMode mode();
         @WithName("client")
         Optional<OIDCClientCredentialsConfig> clientCredentialsConfig();
     }
