@@ -5,20 +5,17 @@ import io.grpc.stub.StreamObserver;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
 import org.project_kessel.api.inventory.v1beta1.*;
+import org.project_kessel.clients.*;
 
 
 import java.util.logging.Logger;
 
-public class NotificationsIntegrationClient {
+public class NotificationsIntegrationClient extends KesselClient<KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceStub, KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceBlockingStub>{
 
     private static final Logger logger = Logger.getLogger(RhelHostClient.class.getName());
 
-    private final KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceStub asyncStub;
-    private final KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceBlockingStub blockingStub;
-
     NotificationsIntegrationClient(Channel channel) {
-        asyncStub = KesselNotificationsIntegrationServiceGrpc.newStub(channel);
-        blockingStub = KesselNotificationsIntegrationServiceGrpc.newBlockingStub(channel);
+        super(KesselNotificationsIntegrationServiceGrpc.newStub(channel), KesselNotificationsIntegrationServiceGrpc.newBlockingStub(channel));
     }
 
     public CreateNotificationsIntegrationResponse CreateNotificationsIntegration(CreateNotificationsIntegrationRequest request) {
