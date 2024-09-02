@@ -1,0 +1,31 @@
+name: sync-protos
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours.
+
+
+jobs:
+  build:
+    name: Sync protos to clients
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone inventory-api repo
+        run: git clone --depth=1 https://github.com/project-kessel/inventory-api.git
+      - name: Copy proto files
+        run: |
+          cp -r inventory-api/api/kessel/inventory/v1/*.proto src/main/proto/kessel/inventory/v1/
+          cp -r inventory-api/api/kessel/inventory/v1beta1/*.proto src/main/proto/kessel/inventory/v1beta1/
+          rm -rf inventory-api/
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Sync updated proto files'
+          title: Update protos
+          
