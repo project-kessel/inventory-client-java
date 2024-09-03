@@ -4,18 +4,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
+import org.project_kessel.clients.authn.AuthenticationConfig;
+
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-class CDIManagedClientsTest {
+class CDIManagedInventoryClientsTest {
     @Test
     void testInsecureNoAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(false, makeDummyAuthenticationConfig(false));
-        CDIManagedClients cdiManagedClients = new CDIManagedClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(1)
@@ -38,10 +40,10 @@ class CDIManagedClientsTest {
     @Test
     void testInsecureWithAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(false, makeDummyAuthenticationConfig(true));
-        CDIManagedClients cdiManagedClients = new CDIManagedClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(0)
@@ -64,10 +66,10 @@ class CDIManagedClientsTest {
     @Test
     void testSecureNoAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(true, makeDummyAuthenticationConfig(false));
-        CDIManagedClients cdiManagedClients = new CDIManagedClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(0)
@@ -90,10 +92,10 @@ class CDIManagedClientsTest {
     @Test
     void testSecureWithAuthnMakesCorrectManagerCall() {
         Config config = makeDummyConfig(true, makeDummyAuthenticationConfig(true));
-        CDIManagedClients cdiManagedClients = new CDIManagedClients();
+        CDIManagedInventoryClients cdiManagedInventoryClients = new CDIManagedInventoryClients();
 
         try (MockedStatic<InventoryGrpcClientsManager> dummyManager = Mockito.mockStatic(InventoryGrpcClientsManager.class)) {
-            cdiManagedClients.getManager(config);
+            cdiManagedInventoryClients.getManager(config);
             dummyManager.verify(
                     () -> InventoryGrpcClientsManager.forInsecureClients(anyString()),
                     times(0)
@@ -135,12 +137,12 @@ class CDIManagedClientsTest {
     static Config.AuthenticationConfig makeDummyAuthenticationConfig(boolean authnEnabled) {
         return new Config.AuthenticationConfig() {
             @Override
-            public Config.AuthMode mode() {
+            public AuthenticationConfig.AuthMode mode() {
                 if(!authnEnabled) {
-                    return Config.AuthMode.DISABLED;
+                    return AuthenticationConfig.AuthMode.DISABLED;
                 }
                 // pick some arbitrary non disabled mode
-                return Config.AuthMode.OIDC_CLIENT_CREDENTIALS;
+                return AuthenticationConfig.AuthMode.OIDC_CLIENT_CREDENTIALS;
             }
 
             @Override

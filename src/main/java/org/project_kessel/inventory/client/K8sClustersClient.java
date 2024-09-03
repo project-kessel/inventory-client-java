@@ -5,18 +5,17 @@ import io.grpc.stub.StreamObserver;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
 import org.project_kessel.api.inventory.v1beta1.*;
+import org.project_kessel.clients.KesselClient;
 
 
 import java.util.logging.Logger;
 
-public class K8sClustersClient {
+public class K8sClustersClient extends KesselClient<KesselK8sClusterServiceGrpc.KesselK8sClusterServiceStub, KesselK8sClusterServiceGrpc.KesselK8sClusterServiceBlockingStub>{
     private static final Logger logger = Logger.getLogger(K8sClustersClient.class.getName());
-    private final KesselK8sClusterServiceGrpc.KesselK8sClusterServiceStub asyncStub;
-    private final KesselK8sClusterServiceGrpc.KesselK8sClusterServiceBlockingStub blockingStub;
 
     K8sClustersClient(Channel channel){
-        asyncStub = KesselK8sClusterServiceGrpc.newStub(channel);
-        blockingStub = KesselK8sClusterServiceGrpc.newBlockingStub(channel);
+        super(KesselK8sClusterServiceGrpc.newStub(channel), KesselK8sClusterServiceGrpc.newBlockingStub(channel));
+    
     }
 
     public void UpdateK8sCluster(UpdateK8sClusterRequest request, StreamObserver<UpdateK8sClusterResponse> responseObserver){
