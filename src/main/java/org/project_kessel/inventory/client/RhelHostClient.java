@@ -4,9 +4,9 @@ import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
-import org.project_kessel.api.inventory.v1beta1.CreateRhelHostRequest;
-import org.project_kessel.api.inventory.v1beta1.CreateRhelHostResponse;
-import org.project_kessel.api.inventory.v1beta1.KesselRhelHostServiceGrpc;
+import org.project_kessel.api.inventory.v1beta1.resources.CreateRhelHostRequest;
+import org.project_kessel.api.inventory.v1beta1.resources.CreateRhelHostResponse;
+import org.project_kessel.api.inventory.v1beta1.resources.KesselRhelHostServiceGrpc;
 
 
 

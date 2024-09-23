@@ -47,13 +47,13 @@ public class CDIManagedInventoryClients {
     }
 
     @Produces
-    public PoliciesClient getPoliciesClient(InventoryGrpcClientsManager manager) {
-        return manager.getPoliciesClient();
+    public K8sPolicyClient getKesselK8sPolicyClient(InventoryGrpcClientsManager manager) {
+        return manager.getKesselK8sPolicyClient();
     }
 
     @Produces
-    public PolicyRelationshipClient getRelationshipsClient(InventoryGrpcClientsManager manager) {
-        return manager.getRelationshipsClient();
+    public K8SPolicyIsPropagatedToK8SClusterClient getKesselK8SPolicyIsPropagatedToK8SClusterClient(InventoryGrpcClientsManager manager) {
+        return manager.getKesselK8SPolicyIsPropagatedToK8SClusterClient();
     }
 
     @Produces

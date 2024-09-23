@@ -4,7 +4,7 @@ import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
-import org.project_kessel.api.inventory.v1beta1.*;
+import org.project_kessel.api.inventory.v1beta1.resources.*;
 import org.project_kessel.clients.KesselClient;
 
 

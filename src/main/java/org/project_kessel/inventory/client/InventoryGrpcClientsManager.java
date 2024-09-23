@@ -47,12 +47,16 @@ public class InventoryGrpcClientsManager extends KesselClientsManager {
         return new K8sClustersClient(channel);
     }
 
-    public PoliciesClient getPoliciesClient() {
-        return new PoliciesClient(channel);
+    public K8sPolicyClient getPoliciesClient() {
+        return new K8sPolicyClient(channel);
     }
 
-    public PolicyRelationshipClient getRelationshipsClient() {
-        return new PolicyRelationshipClient(channel);
+    public K8SPolicyIsPropagatedToK8SClusterClient getKesselK8SPolicyIsPropagatedToK8SClusterClient() {
+        return new K8SPolicyIsPropagatedToK8SClusterClient(channel);
+    }
+
+    public K8sPolicyClient getKesselK8sPolicyClient() {
+        return new K8sPolicyClient(channel);
     }
 
     public NotificationsIntegrationClient getNotificationsIntegrationClient() {

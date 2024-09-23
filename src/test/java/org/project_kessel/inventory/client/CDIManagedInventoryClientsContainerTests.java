@@ -12,12 +12,14 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.project_kessel.api.inventory.v1beta1.*;
+import org.project_kessel.api.inventory.v1beta1.resources.*;
+
 
 import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Use Weld as a test container to check CDI functionality.
@@ -44,22 +46,7 @@ class CDIManagedInventoryClientsContainerTests {
         serverBuilder.addService(new KesselRhelHostServiceGrpc.KesselRhelHostServiceImplBase() {
             @Override
            public void createRhelHost(CreateRhelHostRequest request, StreamObserver<CreateRhelHostResponse> responseObserver) {
-               responseObserver.onNext(CreateRhelHostResponse.newBuilder()
-                       .setHost(RhelHost.newBuilder()
-                               .setMetadata(Metadata.newBuilder()
-                                       .setResourceType("rhel-host")
-                                       .setWorkspace("") // Set workspace value as needed
-                                       .build())
-                               .setReporterData(ReporterData.newBuilder()
-                                       .setReporterType(ReporterData.ReporterType.REPORTER_TYPE_OCM)
-                                       .setReporterInstanceId("user@example.com")
-                                       .setReporterVersion("0.1")
-                                       .setLocalResourceId("1")
-                                       .setApiHref("www.example.com")
-                                       .setConsoleHref("www.example.com")
-                                       .build())
-                               .build())
-                               .build());
+               responseObserver.onNext(CreateRhelHostResponse.newBuilder().build());
                responseObserver.onCompleted();
            }
 
@@ -80,13 +67,13 @@ class CDIManagedInventoryClientsContainerTests {
     void basicCDIWiringTest() {
         /* Make some calls to dummy services in test grpc server to test injected clients */
         CreateRhelHostRequest request = CreateRhelHostRequest.newBuilder()
-                .setHost(RhelHost.newBuilder()
+                .setRhelHost(RhelHost.newBuilder()
                         .setMetadata(Metadata.newBuilder()
                                 .setResourceType("rhel-host")
                                 .setWorkspace("") // Set workspace value as needed
                                 .build())
                         .setReporterData(ReporterData.newBuilder()
-                                .setReporterType(ReporterData.ReporterType.REPORTER_TYPE_OCM)
+                                .setReporterType(ReporterData.ReporterType.ACM)
                                 .setReporterInstanceId("user@example.com")
                                 .setReporterVersion("0.1")
                                 .setLocalResourceId("1")
@@ -95,19 +82,24 @@ class CDIManagedInventoryClientsContainerTests {
                                 .build())
                         .build())
                 .build();
+
        var rhelHostResponse = rhelHostClient.CreateRhelHost(request);
        CreateK8sClusterRequest request1= CreateK8sClusterRequest.newBuilder().setK8SCluster(
-               K8sCluster.newBuilder().setData(K8sClusterDetail.newBuilder()
-                       .setExternalClusterId("11").setClusterStatus(K8sClusterDetail
-                               .ClusterStatus.CLUSTER_STATUS_READY).build())
+               K8sCluster.newBuilder().setReporterData(ReporterData.newBuilder()
+                               .setReporterType(ReporterData.ReporterType.ACM)
+                               .setReporterInstanceId("user@example.com")
+                               .setReporterVersion("0.1")
+                               .setLocalResourceId("1")
+                               .setApiHref("www.example.com")
+                               .setConsoleHref("www.example.com")
+                               .build())
                        .setMetadata(Metadata.newBuilder()
                        .setResourceType("rhel-host")
                        .setWorkspace("") // Set workspace value as needed
                        .build()).build()
        ).build();
 
-
-        assertEquals("rhel-host", rhelHostResponse.getHost().getMetadata().getResourceType());
+        assertNotNull(rhelHostResponse);
     }
 
     /*
