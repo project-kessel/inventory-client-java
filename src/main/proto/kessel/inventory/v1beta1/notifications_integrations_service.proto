@@ -1,50 +1,38 @@
 syntax = "proto3";
 
-package kessel.inventory.v1beta1;
+package kessel.inventory.v1beta1.resources;
 
 import "google/api/annotations.proto";
-import "google/api/field_behavior.proto";
+import "buf/validate/validate.proto";
 
-import "kessel/inventory/v1beta1/notifications_integration.proto";
+import "kessel/inventory/v1beta1/resources/notifications_integration.proto";
+import "kessel/inventory/v1beta1/resources/reporter_data.proto";
 
-option go_package = "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta1";
+option go_package = "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta1/resources";
 option java_multiple_files = true;
-option java_package = "org.project_kessel.api.inventory.v1beta1";
+option java_package = "org.project_kessel.api.inventory.v1beta1.resources";
 
 message CreateNotificationsIntegrationRequest {
   // The NotificationsIntegration to create in Kessel Asset Inventory
-  NotificationsIntegration integration = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
+  NotificationsIntegration integration = 1 [ (buf.validate.field).required = true ];
 }
 
-message CreateNotificationsIntegrationResponse {
-  // The NotificationsIntegration created in Kessel Asset Inventory
-  NotificationsIntegration integration = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-}
+message CreateNotificationsIntegrationResponse {}
 
 message UpdateNotificationsIntegrationRequest {
-  // A resource instance using the format:
-  // \"<reporter_data.reporter_type>:<reporter_data.resourceId_alias>\"
-  string resource = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-  // The NotificationsIntegration to update
-  NotificationsIntegration integration = 2 [
-    (google.api.field_behavior) = REQUIRED
-  ];
+  // The resource to be updated will be defined by 
+  // \"<reporter_data.reporter_type>:<reporter_instaance_id>:<reporter_data.local_resource_id>\"
+  // from the request body.
+  NotificationsIntegration integration = 1 [ (buf.validate.field).required = true ];
 }
 
 message UpdateNotificationsIntegrationResponse {}
 
 message DeleteNotificationsIntegrationRequest {
-  // A resource instance using the format:
-  // \"<reporter_data.reporter_type>:<reporter_data.resourceId_alias>\"
-  string resource = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
+  // The resource to be deleted will be defined by 
+  // \"<reporter_data.reporter_type>:<reporter_instaance_id>:<reporter_data.local_resource_id>\"
+  // from the request body.
+  ReporterData reporter_data = 1 [ json_name = "reporter_data", (buf.validate.field).required = true ];
 }
 
 message DeleteNotificationsIntegrationResponse {}
@@ -52,21 +40,22 @@ message DeleteNotificationsIntegrationResponse {}
 service KesselNotificationsIntegrationService {
   rpc CreateNotificationsIntegration(CreateNotificationsIntegrationRequest) returns (CreateNotificationsIntegrationResponse) {
     option (google.api.http) = {
-      post : "/api/inventory/v1beta1/notificationsIntegrations"
+      post : "/api/inventory/v1beta1/resources/notifications-integrations"
       body : "*"
     };
   };
 
   rpc UpdateNotificationsIntegration(UpdateNotificationsIntegrationRequest) returns (UpdateNotificationsIntegrationResponse) {
     option (google.api.http) = {
-      put : "/api/inventory/v1beta1/notificationsIntegrations/{resource}"
+      put : "/api/inventory/v1beta1/resources/notifications-integrations"
       body : "*"
     };
   };
 
   rpc DeleteNotificationsIntegration(DeleteNotificationsIntegrationRequest) returns (DeleteNotificationsIntegrationResponse) {
     option (google.api.http) = {
-      delete : "/api/inventory/v1beta1/notificationsIntegrations/{resource}"
+      delete : "/api/inventory/v1beta1/resources/notifications-integrations"
+      body : "*"
     };
   };
 }
