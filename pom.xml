@@ -47,6 +47,11 @@
             <version>0.1</version>
         </dependency>
         <dependency>
+            <groupId>build.buf</groupId>
+            <artifactId>protovalidate</artifactId>
+            <version>0.3.2</version>
+        </dependency>
+        <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
             <version>4.1.0</version>
@@ -55,7 +60,7 @@
         <dependency>
             <groupId>io.smallrye.config</groupId>
             <artifactId>smallrye-config</artifactId>
-            <version>3.8.1</version>
+            <version>3.9.1</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -71,41 +76,36 @@
         <dependency>
             <groupId>io.smallrye.reactive</groupId>
             <artifactId>mutiny</artifactId>
-            <version>2.6.0</version>
+            <version>2.6.2</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-netty-shaded</artifactId>
-            <version>1.64.0</version>
+            <version>1.66.0</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
-            <version>1.64.0</version>
+            <version>1.66.0</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
-            <version>1.64.0</version>
-        </dependency>
-        <dependency>
-            <groupId>build.buf.protoc-gen-validate</groupId>
-            <artifactId>pgv-java-stub</artifactId>
-            <version>1.0.4</version>
+            <version>1.66.0</version>
         </dependency>
         <!-- Default OIDC implementation. Must be provided by the user. -->
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>oauth2-oidc-sdk</artifactId>
-            <version>11.13</version>
+            <version>11.19.1</version>
             <scope>provided</scope>
         </dependency>
         <!-- Included only for @RegisterForReflection to support native Quarkus apps if applicable -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-core</artifactId>
-            <version>3.12.3</version>
+            <version>3.15.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency> <!-- necessary for Java 9+ -->
@@ -116,8 +116,8 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.2</version>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -160,25 +160,12 @@
                             <goal>compile-custom</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>protoc-java-pgv</id>
-                        <goals>
-                            <goal>compile-custom</goal>
-                        </goals>
-                        <configuration>
-                            <pluginParameter>lang=java</pluginParameter>
-                            <pluginId>java-pgv</pluginId>
-                            <pluginArtifact>
-                                build.buf.protoc-gen-validate:protoc-gen-validate:1.0.4:exe:${os.detected.classifier}
-                            </pluginArtifact>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>io.smallrye</groupId>
                 <artifactId>jandex-maven-plugin</artifactId>
-                <version>3.1.8</version>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
                         <id>make-index</id>
@@ -191,7 +178,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.6.3</version>
+                <version>3.10.0</version>
                 <configuration>
                     <doclint>all,-missing</doclint>
                 </configuration>
@@ -222,7 +209,7 @@
             <plugin>
                 <groupId>net.nicoulaj.maven.plugins</groupId>
                 <artifactId>checksum-maven-plugin</artifactId>
-                <version>1.10</version>
+                <version>1.11</version>
                 <executions>
                     <execution>
                         <goals>
@@ -234,7 +221,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.2.6</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -252,7 +239,7 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.4.0</version>
+                <version>0.5.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
