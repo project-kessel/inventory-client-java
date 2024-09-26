@@ -7,20 +7,16 @@ import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
 import org.project_kessel.api.inventory.v1beta1.resources.CreateRhelHostRequest;
 import org.project_kessel.api.inventory.v1beta1.resources.CreateRhelHostResponse;
 import org.project_kessel.api.inventory.v1beta1.resources.KesselRhelHostServiceGrpc;
-
+import org.project_kessel.clients.KesselClient;
 
 
 import java.util.logging.Logger;
 
-public class RhelHostClient {
+public class RhelHostClient extends KesselClient<KesselRhelHostServiceGrpc.KesselRhelHostServiceStub, KesselRhelHostServiceGrpc.KesselRhelHostServiceBlockingStub> {
     private static final Logger logger = Logger.getLogger(RhelHostClient.class.getName());
 
-    private final KesselRhelHostServiceGrpc.KesselRhelHostServiceStub asyncStub;
-    private final KesselRhelHostServiceGrpc.KesselRhelHostServiceBlockingStub blockingStub;
-
     RhelHostClient(Channel channel){
-        asyncStub = KesselRhelHostServiceGrpc.newStub(channel);
-        blockingStub = KesselRhelHostServiceGrpc.newBlockingStub(channel);
+        super(KesselRhelHostServiceGrpc.newStub(channel), KesselRhelHostServiceGrpc.newBlockingStub(channel));
     }
 
     public void CreateRhelHost(CreateRhelHostRequest request, StreamObserver<CreateRhelHostResponse> responseStreamObserver) {
