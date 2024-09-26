@@ -32,31 +32,37 @@ public class CDIManagedInventoryClients {
     }
 
     @Produces
+    @ApplicationScoped
     public RhelHostClient getHostClient(InventoryGrpcClientsManager manager) {
         return manager.getHostClient();
     }
 
     @Produces
+    @ApplicationScoped
     public InventoryHealthClient getHealthClient(InventoryGrpcClientsManager manager) {
         return manager.getHealthClient();
     }
 
     @Produces
+    @ApplicationScoped
     public K8sClustersClient getK8sClustersClient(InventoryGrpcClientsManager manager) {
         return manager.getK8sClustersClient();
     }
 
     @Produces
+    @ApplicationScoped
     public K8sPolicyClient getKesselK8sPolicyClient(InventoryGrpcClientsManager manager) {
         return manager.getKesselK8sPolicyClient();
     }
 
     @Produces
+    @ApplicationScoped
     public K8SPolicyIsPropagatedToK8SClusterClient getKesselK8SPolicyIsPropagatedToK8SClusterClient(InventoryGrpcClientsManager manager) {
         return manager.getKesselK8SPolicyIsPropagatedToK8SClusterClient();
     }
 
     @Produces
+    @ApplicationScoped
     public NotificationsIntegrationClient getNotificationsIntegrationClient(InventoryGrpcClientsManager manager) {
         return manager.getNotificationsIntegrationClient();
     }
