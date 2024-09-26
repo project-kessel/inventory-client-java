@@ -13,6 +13,7 @@ import org.project_kessel.clients.authn.AuthenticationConfig.AuthMode;
 @ApplicationScoped
 public class CDIManagedInventoryClients {
     @Produces
+    @ApplicationScoped
     InventoryGrpcClientsManager getManager(Config config) {
         var isSecureClients = config.isSecureClients();
         var targetUrl = config.targetUrl();
