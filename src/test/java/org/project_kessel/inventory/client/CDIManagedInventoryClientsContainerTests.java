@@ -70,7 +70,7 @@ class CDIManagedInventoryClientsContainerTests {
                 .setRhelHost(RhelHost.newBuilder()
                         .setMetadata(Metadata.newBuilder()
                                 .setResourceType("rhel-host")
-                                .setWorkspace("") // Set workspace value as needed
+                                .setWorkspaceId("") // Set workspace value as needed
                                 .build())
                         .setReporterData(ReporterData.newBuilder()
                                 .setReporterType(ReporterData.ReporterType.ACM)
@@ -95,7 +95,7 @@ class CDIManagedInventoryClientsContainerTests {
                                .build())
                        .setMetadata(Metadata.newBuilder()
                        .setResourceType("rhel-host")
-                       .setWorkspace("") // Set workspace value as needed
+                       .setWorkspaceId("") // Set workspace value as needed
                        .build()).build()
        ).build();
 
