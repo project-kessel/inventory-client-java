@@ -6,7 +6,7 @@
     <groupId>org.project-kessel</groupId>
     <artifactId>inventory-client-java</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.8</version> <!-- Bump version to push to maven central -->
     <name>Kessel Inventory API Java Client Library</name>
     <description>A library providing managed clients for apps connecting to the Kessel Inventory API.</description>
     <url>https://github.com/project-kessel/inventory-client-java/tree/main</url>
