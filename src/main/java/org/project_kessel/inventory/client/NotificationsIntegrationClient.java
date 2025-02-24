@@ -2,6 +2,7 @@ package org.project_kessel.inventory.client;
 
 import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
 import org.project_kessel.api.inventory.v1beta1.resources.*;
@@ -110,6 +111,35 @@ public class NotificationsIntegrationClient extends KesselClient<KesselNotificat
         var uni = Uni.createFrom().publisher(responseProcessor);
         DeleteNotificationsIntegration(request, streamObserver);
         return uni;
+    }
+
+    public void listNotificationsIntegrations(
+            ListNotificationsIntegrationsRequest request,
+            StreamObserver<ListNotificationsIntegrationsResponse> responseObserver) {
+        asyncStub.listNotificationsIntegrations(request, responseObserver);
+    }
+
+    public Multi<ListNotificationsIntegrationsResponse> listNotificationsIntegrations(ListNotificationsIntegrationsRequest request) {
+        final UnicastProcessor<ListNotificationsIntegrationsResponse> responseProcessor = UnicastProcessor.create();
+        var streamObserver = new StreamObserver<ListNotificationsIntegrationsResponse>() {
+            @Override
+            public void onNext(ListNotificationsIntegrationsResponse response) {
+                responseProcessor.onNext(response);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                responseProcessor.onError(t);
+            }
+
+            @Override
+            public void onCompleted() {
+                responseProcessor.onComplete();
+            }
+        };
+        var multi = Multi.createFrom().publisher(responseProcessor);
+        listNotificationsIntegrations(request, streamObserver);
+        return multi;
     }
 }
 
