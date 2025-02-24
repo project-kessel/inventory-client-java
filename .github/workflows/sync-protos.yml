@@ -22,6 +22,7 @@ jobs:
           cp -r inventory-api/api/kessel/inventory/v1/*.proto src/main/proto/kessel/inventory/v1/
           cp -r inventory-api/api/kessel/inventory/v1beta1/relationships/*.proto src/main/proto/kessel/inventory/v1beta1/
           cp -r inventory-api/api/kessel/inventory/v1beta1/resources/*.proto src/main/proto/kessel/inventory/v1beta1/
+          cp -r inventory-api/api/kessel/inventory/v1beta2/resources/*.proto src/main/proto/kessel/inventory/v1beta2/
           rm -rf inventory-api/
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
