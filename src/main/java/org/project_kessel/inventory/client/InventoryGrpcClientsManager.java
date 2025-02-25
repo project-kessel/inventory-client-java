@@ -62,4 +62,8 @@ public class InventoryGrpcClientsManager extends KesselClientsManager {
     public NotificationsIntegrationClient getNotificationsIntegrationClient() {
         return new NotificationsIntegrationClient(channel);
     }
+
+    public KesselCheckClient getKesselCheckClient() {
+        return new KesselCheckClient(channel);
+    }
 }

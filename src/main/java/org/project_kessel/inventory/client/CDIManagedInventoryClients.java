@@ -67,4 +67,10 @@ public class CDIManagedInventoryClients {
     public NotificationsIntegrationClient getNotificationsIntegrationClient(InventoryGrpcClientsManager manager) {
         return manager.getNotificationsIntegrationClient();
     }
+
+    @Produces
+    @ApplicationScoped
+    public KesselCheckClient getKesselCheckClient(InventoryGrpcClientsManager manager) {
+        return manager.getKesselCheckClient();
+    }
 }
