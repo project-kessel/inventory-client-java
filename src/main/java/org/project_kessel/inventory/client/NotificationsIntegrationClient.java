@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class NotificationsIntegrationClient extends KesselClient<KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceStub, KesselNotificationsIntegrationServiceGrpc.KesselNotificationsIntegrationServiceBlockingStub>{
 
-    private static final Logger logger = Logger.getLogger(RhelHostClient.class.getName());
+    private static final Logger logger = Logger.getLogger(NotificationsIntegrationClient.class.getName());
 
     NotificationsIntegrationClient(Channel channel) {
         super(KesselNotificationsIntegrationServiceGrpc.newStub(channel), KesselNotificationsIntegrationServiceGrpc.newBlockingStub(channel));

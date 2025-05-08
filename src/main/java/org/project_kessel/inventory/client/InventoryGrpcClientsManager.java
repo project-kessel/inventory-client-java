@@ -66,4 +66,8 @@ public class InventoryGrpcClientsManager extends KesselClientsManager {
     public KesselCheckClient getKesselCheckClient() {
         return new KesselCheckClient(channel);
     }
+
+    public KesselInventoryClient getKesselInventoryClient() {
+        return new KesselInventoryClient(channel);
+    }
 }
