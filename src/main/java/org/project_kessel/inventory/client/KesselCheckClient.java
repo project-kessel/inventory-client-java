@@ -15,7 +15,7 @@ import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
 
 public class KesselCheckClient extends KesselClient<KesselCheckServiceGrpc.KesselCheckServiceStub, KesselCheckServiceGrpc.KesselCheckServiceBlockingStub> {
-    private static final Logger logger = Logger.getLogger(RhelHostClient.class.getName());
+    private static final Logger logger = Logger.getLogger(KesselCheckClient.class.getName());
 
     KesselCheckClient(Channel channel) {
         super(KesselCheckServiceGrpc.newStub(channel), KesselCheckServiceGrpc.newBlockingStub(channel));
