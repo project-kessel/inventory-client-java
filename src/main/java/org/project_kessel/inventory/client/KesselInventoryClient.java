@@ -15,6 +15,7 @@ import org.project_kessel.api.inventory.v1beta2.StreamedListObjectsRequest;
 import org.project_kessel.api.inventory.v1beta2.StreamedListObjectsResponse;
 import org.project_kessel.clients.KesselClient;
 
+import java.util.function.Consumer;
 import java.util.Iterator;
 import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
@@ -34,64 +35,19 @@ public class KesselInventoryClient extends KesselClient<KesselInventoryServiceGr
         return blockingStub.check(request);
     } 
 
-    public void Check(CheckRequest request, StreamObserver<CheckResponse> responObserver) {
-        asyncStub.check(request, responObserver);
+    public void Check(CheckRequest request, StreamObserver<CheckResponse> responseObserver) {
+        asyncStub.check(request, responseObserver);
     }
 
-    public Uni<CheckResponse> CheckUni(CheckRequest request) {
-        final UnicastProcessor<CheckResponse> responseProcessor = UnicastProcessor.create();
-        var streamObserver = new StreamObserver<CheckResponse>() {
-            @Override
-            public void onNext(CheckResponse response) {
-                responseProcessor.onNext(response);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                responseProcessor.onError(t);
-            }
-
-            @Override
-            public void onCompleted() {
-                responseProcessor.onComplete();
-            }
-        };
-        var uni = Uni.createFrom().publisher(responseProcessor);
-        Check(request, streamObserver);
-        return uni;
-    }
-
+    
     public CheckForUpdateResponse CheckForUpdate(CheckForUpdateRequest request) {
         return blockingStub.checkForUpdate(request);
     }
-
+    
     public void CheckForUpdate(CheckForUpdateRequest request, StreamObserver<CheckForUpdateResponse> responObserver) {
         asyncStub.checkForUpdate(request, responObserver);
     }
-
-    public Uni<CheckForUpdateResponse> CheckForUpdateUni(CheckForUpdateRequest request) {
-        final UnicastProcessor<CheckForUpdateResponse> responseProcessor = UnicastProcessor.create();
-        var streamObserver = new StreamObserver<CheckForUpdateResponse>() {
-            @Override
-            public void onNext(CheckForUpdateResponse response) {
-                responseProcessor.onNext(response);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                responseProcessor.onError(t);
-            }
-
-            @Override
-            public void onCompleted() {
-                responseProcessor.onComplete();
-            }
-        };
-        var uni = Uni.createFrom().publisher(responseProcessor);
-        CheckForUpdate(request, streamObserver);
-        return uni;
-    }
-
+    
     
     public ReportResourceResponse ReportResource(ReportResourceRequest request) {
         return blockingStub.reportResource(request);
@@ -101,67 +57,41 @@ public class KesselInventoryClient extends KesselClient<KesselInventoryServiceGr
         asyncStub.reportResource(request, responObserver);
     }
     
-    public Uni<ReportResourceResponse> ReportResourceUni(ReportResourceRequest request) {
-        final UnicastProcessor<ReportResourceResponse> responseProcessor = UnicastProcessor.create();
-        var streamObserver = new StreamObserver<ReportResourceResponse>() {
-            @Override
-            public void onNext(ReportResourceResponse response) {
-                responseProcessor.onNext(response);
-            }
-            
-            @Override
-            public void onError(Throwable t) {
-                responseProcessor.onError(t);
-            }
-            
-            @Override
-            public void onCompleted() {
-                responseProcessor.onComplete();
-            }
-        };
-        var uni = Uni.createFrom().publisher(responseProcessor);
-        ReportResource(request, streamObserver);
-        return uni;
-    }
-    
     public DeleteResourceResponse DeleteResource(DeleteResourceRequest request) {
         return blockingStub.deleteResource(request);
     }
-
+    
     public void DeleteResource(DeleteResourceRequest request, StreamObserver<DeleteResourceResponse> responObserver) {
         asyncStub.deleteResource(request, responObserver);
     }
-
-    public Uni<DeleteResourceResponse> DeleteResourceUni(DeleteResourceRequest request) {
-        final UnicastProcessor<DeleteResourceResponse> responseProcessor = UnicastProcessor.create();
-        var streamObserver = new StreamObserver<DeleteResourceResponse>() {
-            @Override
-            public void onNext(DeleteResourceResponse response) {
-                responseProcessor.onNext(response);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                responseProcessor.onError(t);
-            }
-
-            @Override
-            public void onCompleted() {
-                responseProcessor.onComplete();
-            }
-        };
-        var uni = Uni.createFrom().publisher(responseProcessor);
-        DeleteResource(request, streamObserver);
-        return uni;
-    }
-
+    
     public void streamedListObjects(StreamedListObjectsRequest request,
-                                StreamObserver<StreamedListObjectsResponse> responseObserver) {
+    StreamObserver<StreamedListObjectsResponse> responseObserver) {
         asyncStub.streamedListObjects(request, responseObserver);
     }
-
+    
     public Iterator<StreamedListObjectsResponse> streamedListObjects(StreamedListObjectsRequest request) {
         return blockingStub.streamedListObjects(request);
+    }
+    
+    private <T> Uni<T> toUni(Consumer<StreamObserver<T>> grpcCall) {
+        final UnicastProcessor<T> processor = UnicastProcessor.create();
+        StreamObserver<T> observer = new StreamObserver<T>() {
+            @Override
+            public void onNext(T value) {
+                processor.onNext(value);
+            }
+            @Override
+            public void onError(Throwable t) {
+                processor.onError(t);
+            }
+            @Override
+            public void onCompleted() {
+                processor.onComplete();
+            }
+        };
+        grpcCall.accept(observer);
+        return Uni.createFrom().publisher(processor);
     }
 
     public Multi<StreamedListObjectsResponse> streamedListObjectsMulti(StreamedListObjectsRequest request) {
