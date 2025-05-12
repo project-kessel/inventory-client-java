@@ -44,8 +44,8 @@ public class KesselInventoryClient extends KesselClient<KesselInventoryServiceGr
         return blockingStub.checkForUpdate(request);
     }
     
-    public void CheckForUpdate(CheckForUpdateRequest request, StreamObserver<CheckForUpdateResponse> responObserver) {
-        asyncStub.checkForUpdate(request, responObserver);
+    public void CheckForUpdate(CheckForUpdateRequest request, StreamObserver<CheckForUpdateResponse> responseObserver) {
+        asyncStub.checkForUpdate(request, responseObserver);
     }
     
     
@@ -53,16 +53,16 @@ public class KesselInventoryClient extends KesselClient<KesselInventoryServiceGr
         return blockingStub.reportResource(request);
     }
     
-    public void ReportResource(ReportResourceRequest request, StreamObserver<ReportResourceResponse> responObserver) {
-        asyncStub.reportResource(request, responObserver);
+    public void ReportResource(ReportResourceRequest request, StreamObserver<ReportResourceResponse> responseObserver) {
+        asyncStub.reportResource(request, responseObserver);
     }
     
     public DeleteResourceResponse DeleteResource(DeleteResourceRequest request) {
         return blockingStub.deleteResource(request);
     }
     
-    public void DeleteResource(DeleteResourceRequest request, StreamObserver<DeleteResourceResponse> responObserver) {
-        asyncStub.deleteResource(request, responObserver);
+    public void DeleteResource(DeleteResourceRequest request, StreamObserver<DeleteResourceResponse> responseObserver) {
+        asyncStub.deleteResource(request, responseObserver);
     }
     
     public void streamedListObjects(StreamedListObjectsRequest request,
