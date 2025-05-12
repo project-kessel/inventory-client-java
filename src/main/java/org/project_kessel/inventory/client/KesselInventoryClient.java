@@ -73,7 +73,23 @@ public class KesselInventoryClient extends KesselClient<KesselInventoryServiceGr
     public Iterator<StreamedListObjectsResponse> streamedListObjects(StreamedListObjectsRequest request) {
         return blockingStub.streamedListObjects(request);
     }
+
+    public Uni<CheckResponse> CheckUni(CheckRequest request) {
+        return toUni(observer -> Check(request, observer));
+    }
     
+    public Uni<CheckForUpdateResponse> CheckForUpdateUni(CheckForUpdateRequest request) {
+        return toUni(observer -> CheckForUpdate(request, observer));
+    }
+    
+    public Uni<ReportResourceResponse> ReportResourceUni(ReportResourceRequest request) {
+        return toUni(observer -> ReportResource(request, observer));
+    }
+    
+    public Uni<DeleteResourceResponse> DeleteResourceUni(DeleteResourceRequest request) {
+        return toUni(observer -> DeleteResource(request, observer));
+    }
+
     private <T> Uni<T> toUni(Consumer<StreamObserver<T>> grpcCall) {
         final UnicastProcessor<T> processor = UnicastProcessor.create();
         StreamObserver<T> observer = new StreamObserver<T>() {
