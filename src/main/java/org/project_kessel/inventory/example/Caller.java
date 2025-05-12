@@ -8,11 +8,21 @@ import org.project_kessel.api.inventory.v1beta2.CheckForUpdateRequest;
 import org.project_kessel.api.inventory.v1beta2.CheckForUpdateResponse;
 import org.project_kessel.api.inventory.v1beta2.CheckRequest;
 import org.project_kessel.api.inventory.v1beta2.CheckResponse;
+import org.project_kessel.api.inventory.v1beta2.DeleteResourceRequest;
+import org.project_kessel.api.inventory.v1beta2.DeleteResourceResponse;
+import org.project_kessel.api.inventory.v1beta2.ReportResourceRequest;
+import org.project_kessel.api.inventory.v1beta2.ReportResourceResponse;
 import org.project_kessel.api.inventory.v1beta2.ReporterReference;
+import org.project_kessel.api.inventory.v1beta2.RepresentationMetadata;
 import org.project_kessel.api.inventory.v1beta2.ResourceReference;
+import org.project_kessel.api.inventory.v1beta2.ResourceRepresentations;
 import org.project_kessel.api.inventory.v1beta2.SubjectReference;
+import org.project_kessel.api.inventory.v1beta2.WriteVisibility;
 import org.project_kessel.inventory.client.InventoryGrpcClientsManager;
 import org.project_kessel.inventory.client.KesselInventoryClient;
+
+import com.google.protobuf.Struct;
+import com.google.protobuf.Value;
 
 import io.grpc.stub.StreamObserver;
 import io.smallrye.mutiny.Uni;
@@ -30,6 +40,8 @@ public class Caller {
 
         checkExample();
         checkForUpdateExample();
+        reportResourceExample();
+        deleteResourceExample();
     }
 
     public static void checkExample() {
@@ -222,5 +234,64 @@ public class Caller {
                     }
                 })
                 .await().indefinitely();
+    }
+
+    public static void reportResourceExample() {
+        var reportResourceRequest = ReportResourceRequest.newBuilder()
+                .setWriteVisibility(WriteVisibility.IMMEDIATE)
+                .setType("host")
+                .setReporterType("hbi")
+                .setReporterInstanceId("3088be62-1c60-4884-b133-9200542d0b3f")
+                .setRepresentations(ResourceRepresentations.newBuilder()
+                        .setReporter(Struct.newBuilder()
+                                .putFields("satellite_id",
+                                        Value.newBuilder().setStringValue("2c4196f1-0371-4f4c-8913-e113cfaa6e67")
+                                                .build())
+                                .putFields("sub_manager_id",
+                                        Value.newBuilder().setStringValue("af94f92b-0b65-4cac-b449-6b77e665a08f")
+                                                .build())
+                                .putFields("insights_inventory_id",
+                                        Value.newBuilder().setStringValue("05707922-7b0a-4fe6-982d-6adbc7695b8f")
+                                                .build())
+                                .putFields("ansible_host", Value.newBuilder().setStringValue("host-1").build()))
+                        .setMetadata(RepresentationMetadata.newBuilder()
+                                .setLocalResourceId("dd1b73b9-3e33-4264-968c-e3ce55b9afec")
+                                .setApiHref("https://apiHref.com/")
+                                .setConsoleHref("https://www.console.com/")
+                                .setReporterVersion("2.7.16"))
+                        .setCommon(Struct.newBuilder()
+                                .putFields("workspace_id",
+                                        Value.newBuilder().setStringValue("a64d17d0-aec3-410a-acd0-e0b85b22c076")
+                                                .build())
+                                .build())
+                        .build())
+                .build();
+
+        // Can only create the same object once.
+        var reportResourceResponse = inventoryClient.ReportResource(reportResourceRequest);
+        var permitted = reportResourceResponse == ReportResourceResponse.getDefaultInstance();
+
+        if (permitted) {
+            System.out.println("Reported.");
+        }
+    }
+
+    public static void deleteResourceExample() {
+        var deleteResourceRequest = DeleteResourceRequest.newBuilder()
+            .setReference(ResourceReference.newBuilder()
+            .setResourceId("dd1b73b9-3e33-4264-968c-e3ce55b9afec")
+            .setResourceType("host")
+            .setReporter(ReporterReference.newBuilder()
+                .setType("HBI"))
+                .build())
+            .build();
+        
+        // Can only delete the same object once.
+        var deleteResourceResponse = inventoryClient.DeleteResource(deleteResourceRequest);
+        var permitted = deleteResourceResponse == DeleteResourceResponse.getDefaultInstance();
+
+        if (permitted) {
+            System.out.println("Deleted.");
+        }
     }
 }
