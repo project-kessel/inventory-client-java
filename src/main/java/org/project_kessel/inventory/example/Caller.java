@@ -1,6 +1,8 @@
 package org.project_kessel.inventory.example;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.project_kessel.api.inventory.v1.GetLivezRequest;
 import org.project_kessel.api.inventory.v1beta2.Allowed;
@@ -14,8 +16,11 @@ import org.project_kessel.api.inventory.v1beta2.ReportResourceRequest;
 import org.project_kessel.api.inventory.v1beta2.ReportResourceResponse;
 import org.project_kessel.api.inventory.v1beta2.ReporterReference;
 import org.project_kessel.api.inventory.v1beta2.RepresentationMetadata;
+import org.project_kessel.api.inventory.v1beta2.RepresentationType;
 import org.project_kessel.api.inventory.v1beta2.ResourceReference;
 import org.project_kessel.api.inventory.v1beta2.ResourceRepresentations;
+import org.project_kessel.api.inventory.v1beta2.StreamedListObjectsRequest;
+import org.project_kessel.api.inventory.v1beta2.StreamedListObjectsResponse;
 import org.project_kessel.api.inventory.v1beta2.SubjectReference;
 import org.project_kessel.api.inventory.v1beta2.WriteVisibility;
 import org.project_kessel.inventory.client.InventoryGrpcClientsManager;
@@ -41,6 +46,7 @@ public class Caller {
         checkExample();
         checkForUpdateExample();
         reportResourceExample();
+        streamedListObjectsExample();
         deleteResourceExample();
     }
 
@@ -278,14 +284,14 @@ public class Caller {
 
     public static void deleteResourceExample() {
         var deleteResourceRequest = DeleteResourceRequest.newBuilder()
-            .setReference(ResourceReference.newBuilder()
-            .setResourceId("dd1b73b9-3e33-4264-968c-e3ce55b9afec")
-            .setResourceType("host")
-            .setReporter(ReporterReference.newBuilder()
-                .setType("HBI"))
-                .build())
-            .build();
-        
+                .setReference(ResourceReference.newBuilder()
+                        .setResourceId("dd1b73b9-3e33-4264-968c-e3ce55b9afec")
+                        .setResourceType("host")
+                        .setReporter(ReporterReference.newBuilder()
+                                .setType("hbi"))
+                        .build())
+                .build();
+
         // Can only delete the same object once.
         var deleteResourceResponse = inventoryClient.DeleteResource(deleteResourceRequest);
         var permitted = deleteResourceResponse == DeleteResourceResponse.getDefaultInstance();
@@ -293,5 +299,32 @@ public class Caller {
         if (permitted) {
             System.out.println("Deleted.");
         }
+    }
+
+    public static void streamedListObjectsExample() {
+        var streamedListObjectsRequest = StreamedListObjectsRequest.newBuilder()
+                .setRelation("workspace")
+                .setSubject(SubjectReference.newBuilder()
+                        .setResource(ResourceReference.newBuilder()
+                                .setResourceId("a64d17d0-aec3-410a-acd0-e0b85b22c076")
+                                .setResourceType("workspace")
+                                .setReporter(ReporterReference.newBuilder()
+                                        .setType("rbac")
+                                        .build())
+                                .build())
+                        .build())
+                .setObjectType(RepresentationType.newBuilder()
+                        .setResourceType("host")
+                        .setReporterType("hbi")
+                        .build())
+                .build();
+
+        var responseIterator = inventoryClient.streamedListObjects(streamedListObjectsRequest);
+        Iterable<StreamedListObjectsResponse> iterable = () -> responseIterator;
+
+        var objects = StreamSupport.stream(iterable.spliterator(), false)
+            .map(StreamedListObjectsResponse::getObject)
+            .collect(Collectors.toList());
+        System.out.println("Blocking StreamedListObjects: " + objects);
     }
 }
