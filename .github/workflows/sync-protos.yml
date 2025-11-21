@@ -14,7 +14,7 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Clone inventory-api repo
         run: git clone --depth=1 https://github.com/project-kessel/inventory-api.git
       - name: Copy proto files
